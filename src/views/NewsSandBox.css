@@ -19,3 +19,6 @@
 .site-layout .site-layout-background {
   background: #fff;
 }
+
+#root, .ant-layout {height:100%;}
+.anticon-menu-fold,.anticon-menu-unfold {padding-left: 1em;}

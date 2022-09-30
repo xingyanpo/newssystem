@@ -6,11 +6,15 @@ import {
 import { Layout } from 'antd';
 const { Header } = Layout;
 
+
 export default function TopHeader() {
-  const [collapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const changeButton = () => {
+    setCollapsed(!collapsed)
+  }
   return (
     <Header className="site-layout-background" style={{ padding: 0 }} >
-      {collapsed?<MenuUnfoldOutlined/>:<MenuFoldOutlined/>}
+      {collapsed?<MenuUnfoldOutlined onClick={changeButton}/>:<MenuFoldOutlined onClick={changeButton}/>}
     </Header>
   )
 }
