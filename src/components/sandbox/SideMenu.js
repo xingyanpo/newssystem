@@ -1,39 +1,112 @@
 
 import { Layout, Menu } from 'antd';
 import {
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  UserOutlined, ProfileOutlined
 } from '@ant-design/icons';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import SubMenu from 'antd/lib/menu/SubMenu';
+import { withRouter } from 'react-router-dom';
 const { Sider } = Layout;
 
-export default function SideMenu() {
+// const menuList = [
+//   {
+//   key: '/home',
+//   title: '首页',
+//   icon: <UserOutlined/>
+// },
+// {
+//   key: '/uxer-manage',
+//   title: '用户管理',
+//   icon: <UserOutlined/>,
+//   children: [
+//     {
+//       key: '/user-manage/list',
+//       title: '用户列表',
+//       icon: <UserOutlined/>
+//     }
+//   ]
+// },
+// {
+//   key: 'right-manage',
+//   title: '权限管理',
+//   icon: <UserOutlined/>,
+//   children: [
+//     {
+//       key: 'right-manage/role/list',
+//       title: '角色列表',
+//       icon: <UserOutlined/>
+//     },
+//     {
+//       key: 'right-manage/right/list',
+//       title: '权限列表',
+//       icon: <UserOutlined/>
+//     }
+//   ]
+// }
+// ]
+
+function SideMenu(props) {
+  const navIcons = {
+    // 一级
+    '/home': <ProfileOutlined />,
+    "/user-manage": <ProfileOutlined />,
+    "/right-manage": <ProfileOutlined />,
+    "/news-manage": <ProfileOutlined />,
+    "/audit-manage": <ProfileOutlined />,
+    "/publish-manage": <ProfileOutlined />,
+    // 二级
+    '/user-manage/list': <UserOutlined />,
+    '/right-manage/role/list': <UserOutlined />,
+    '/right-manage/right/list': <UserOutlined />,
+    '/news-manage/add': <UserOutlined />,
+    '/news-manage/draft': <UserOutlined />,
+    '/news-manage/category': <UserOutlined />,
+    '/audit-manage/audit': <UserOutlined />,
+    '/audit-manage/list': <UserOutlined />,
+    '/publish-manage/unpublished': <UserOutlined />,
+    '/publish-manage/published': <UserOutlined />,
+    '/publish-manage/sunset': <UserOutlined />
+  }
+
+  const renderMenu = (menuList) => {
+    return menuList.map(item => {
+      if (item.children?.length > 0) {
+        return pagePermisson(item) && <SubMenu key={item.key} icon={navIcons[item.key]} title={item.title}>
+          {renderMenu(item.children)}
+        </SubMenu>
+      }
+      return pagePermisson(item) && <Menu.Item key={item.key} icon={navIcons[item.key]} title={item.title} onClick={() => {
+        props.history.push(item.key)
+      }}>{item.title}</Menu.Item>
+    })
+  }
+  const pagePermisson = (item) => {
+    return item.pagepermisson === 1
+  }
+
+  const [menuList, setMenuList] = useState([])
+
+  useEffect(() => {
+    fetch('http://localhost:5000/rights?_embed=children').then(res => res.json()).then(res => {
+      setMenuList(res)
+    })
+  }, [])
+
+  const selectKeys = [props.location.pathname]
+  const openKeys = ['/' + props.location.pathname.split('/')[1]]
+
   return (
-    <Sider trigger={null} collapsible >
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <UserOutlined />,
-              label: 'nav 1',
-            },
-            {
-              key: '2',
-              icon: <VideoCameraOutlined />,
-              label: 'nav 2',
-            },
-            {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'nav 3',
-            },
-          ]}
-        />
-      </Sider>
+    <Sider trigger={null} collapsible collapsed={false}>
+      <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
+        <div className="sidemenu-title">新闻发布系统</div>
+        <div style={{ flex: '1', overflow: 'auto' }}>
+          <Menu theme="dark" mode="inline" selectedKeys={selectKeys} defaultOpenKeys={openKeys}>
+            {renderMenu(menuList)}
+          </Menu>
+        </div>
+      </div>
+    </Sider>
   )
 }
+
+export default withRouter(SideMenu)

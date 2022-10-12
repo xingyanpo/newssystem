@@ -22,3 +22,4 @@
 
 #root, .ant-layout {height:100%;}
 .anticon-menu-fold,.anticon-menu-unfold {padding-left: 1em;}
+.sidemenu-title {font-size: 22px; text-align: center;line-height: 2;color: #fff;}
