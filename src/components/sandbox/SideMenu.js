@@ -8,43 +8,6 @@ import SubMenu from 'antd/lib/menu/SubMenu';
 import { withRouter } from 'react-router-dom';
 const { Sider } = Layout;
 
-// const menuList = [
-//   {
-//   key: '/home',
-//   title: '首页',
-//   icon: <UserOutlined/>
-// },
-// {
-//   key: '/uxer-manage',
-//   title: '用户管理',
-//   icon: <UserOutlined/>,
-//   children: [
-//     {
-//       key: '/user-manage/list',
-//       title: '用户列表',
-//       icon: <UserOutlined/>
-//     }
-//   ]
-// },
-// {
-//   key: 'right-manage',
-//   title: '权限管理',
-//   icon: <UserOutlined/>,
-//   children: [
-//     {
-//       key: 'right-manage/role/list',
-//       title: '角色列表',
-//       icon: <UserOutlined/>
-//     },
-//     {
-//       key: 'right-manage/right/list',
-//       title: '权限列表',
-//       icon: <UserOutlined/>
-//     }
-//   ]
-// }
-// ]
-
 function SideMenu(props) {
   const navIcons = {
     // 一级
