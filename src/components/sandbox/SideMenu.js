@@ -61,7 +61,7 @@ function SideMenu(props) {
   return (
     <Sider trigger={null} collapsible collapsed={false}>
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
-        <div className="sidemenu-title">新闻发布系统</div>
+        <div className="sidemenu-title">Backstage Management System</div>
         <div style={{ flex: '1', overflow: 'auto' }}>
           <Menu theme="dark" mode="inline" selectedKeys={selectKeys} defaultOpenKeys={openKeys}>
             {renderMenu(menuList)}
