@@ -44,7 +44,7 @@ export default function RoleList() {
     axios.get('http://localhost:5000/rights?_embed=children').then(res => {
       setRightList(res.data)
     })
-  })
+  }, [])
   const confirmMethod = (item) => {
     confirm({
       title: '你确定要删除吗？',

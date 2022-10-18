@@ -1,8 +1,6 @@
 
 import { Layout, Menu } from 'antd';
-import {
-  UserOutlined, ProfileOutlined
-} from '@ant-design/icons';
+import {UserOutlined, ProfileOutlined} from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import SubMenu from 'antd/lib/menu/SubMenu';
 import { withRouter } from 'react-router-dom';
