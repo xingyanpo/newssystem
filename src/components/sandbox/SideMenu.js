@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import SubMenu from 'antd/lib/menu/SubMenu';
 import { withRouter } from 'react-router-dom';
 const { Sider } = Layout;
-
 function SideMenu(props) {
   const navIcons = {
     // 一级
@@ -28,31 +27,29 @@ function SideMenu(props) {
     '/publish-manage/published': <UserOutlined />,
     '/publish-manage/sunset': <UserOutlined />
   }
-
+  
+  const {role:{rights}} = JSON.parse(localStorage.getItem("token"))
+  const checkPagePermission = (item) => {
+    return item.pagepermisson && rights.includes(item.key)
+  }
   const renderMenu = (menuList) => {
     return menuList.map(item => {
-      if (item.children?.length > 0) {
-        return pagePermisson(item) && <SubMenu key={item.key} icon={navIcons[item.key]} title={item.title}>
-          {renderMenu(item.children)}
-        </SubMenu>
+      if (item.children?.length > 0 && checkPagePermission(item)) {
+        return <SubMenu key={item.key} icon={navIcons[item.key]} title={item.title}>
+        { renderMenu(item.children) }
+     </SubMenu>
       }
-      return pagePermisson(item) && <Menu.Item key={item.key} icon={navIcons[item.key]} title={item.title} onClick={() => {
+      return checkPagePermission(item) && <Menu.Item key={item.key} icon={navIcons[item.key]} title={item.title} onClick={() => {
         props.history.push(item.key)
       }}>{item.title}</Menu.Item>
     })
   }
-  const pagePermisson = (item) => {
-    return item.pagepermisson === 1
-  }
-
   const [menuList, setMenuList] = useState([])
-
   useEffect(() => {
     fetch('http://localhost:5000/rights?_embed=children').then(res => res.json()).then(res => {
       setMenuList(res)
     })
   }, [])
-
   const selectKeys = [props.location.pathname]
   const openKeys = ['/' + props.location.pathname.split('/')[1]]
 

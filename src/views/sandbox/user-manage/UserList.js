@@ -70,11 +70,21 @@ export default function UserList() {
     setdataSource(dataSource.filter(data => data.id !== item.id))
     axios.delete(`http://localhost:5000/users/${item.id}`)
   }
+  
+  const adminData  = JSON.parse(localStorage.getItem("token"))
 
   useEffect(() => {
+    const roleObj = {
+      '1': 'superadmin',
+      '2': 'admin',
+      '3': 'editor'
+    }
     axios.get('http://localhost:5000/users?_expand=role').then(res => {
       const list = res.data
-      setdataSource(list)
+      setdataSource(roleObj[adminData.roleId]==='superadmin'? list: [
+        ...list.filter(item=>item.username === adminData.username),
+        ...list.filter(item=> item.region === adminData.region && roleObj[item.roleId] === 'editor')
+      ])
     })
     axios.get('http://localhost:5000/regions').then(res => {
       const list = res.data
@@ -84,7 +94,7 @@ export default function UserList() {
       const list = res.data
       setRole(list)
     })
-  }, [])
+  }, [adminData.roleId, adminData.username, adminData.region])
   const addFormOk = () => {
     addForm.current.validateFields().then(value => {
       setIsOpen(false)
