@@ -38,10 +38,10 @@ export default function RoleList() {
     }
   ]
   useEffect(() => {
-    axios.get('http://localhost:5000/roles').then(res => {
+    axios.get('/roles').then(res => {
       setdataSource(res.data)
     })
-    axios.get('http://localhost:5000/rights?_embed=children').then(res => {
+    axios.get('/rights?_embed=children').then(res => {
       setRightList(res.data)
     })
   }, [])
@@ -60,7 +60,7 @@ export default function RoleList() {
   }
   const deleteMethod = (item) => {
       setdataSource(dataSource.filter(data => data.id !== item.id))
-      axios.delete(`http://localhost:5000/roles/${item.id}`)
+      axios.delete(`/roles/${item.id}`)
   }
   const handleOk = () => {
     setIsModalOpen(false);
@@ -73,7 +73,7 @@ export default function RoleList() {
       }
       return item
     }))
-    axios.patch(`http://localhost:5000/roles/${currentId}`,{
+    axios.patch(`/roles/${currentId}`,{
       rights: currentRights
     })
   };

@@ -4,6 +4,7 @@ import {UserOutlined, ProfileOutlined} from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import SubMenu from 'antd/lib/menu/SubMenu';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 const { Sider } = Layout;
 function SideMenu(props) {
   const navIcons = {
@@ -46,8 +47,8 @@ function SideMenu(props) {
   }
   const [menuList, setMenuList] = useState([])
   useEffect(() => {
-    fetch('http://localhost:5000/rights?_embed=children').then(res => res.json()).then(res => {
-      setMenuList(res)
+    axios.get('/rights?_embed=children').then(res=> {
+      setMenuList(res.data)
     })
   }, [])
   const selectKeys = [props.location.pathname]

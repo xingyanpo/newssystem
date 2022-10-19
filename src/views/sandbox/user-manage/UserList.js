@@ -68,7 +68,7 @@ export default function UserList() {
   }
   const deleteMethod = (item) => {
     setdataSource(dataSource.filter(data => data.id !== item.id))
-    axios.delete(`http://localhost:5000/users/${item.id}`)
+    axios.delete(`/users/${item.id}`)
   }
   
   const adminData  = JSON.parse(localStorage.getItem("token"))
@@ -79,18 +79,18 @@ export default function UserList() {
       '2': 'admin',
       '3': 'editor'
     }
-    axios.get('http://localhost:5000/users?_expand=role').then(res => {
+    axios.get('/users?_expand=role').then(res => {
       const list = res.data
       setdataSource(roleObj[adminData.roleId]==='superadmin'? list: [
         ...list.filter(item=>item.username === adminData.username),
         ...list.filter(item=> item.region === adminData.region && roleObj[item.roleId] === 'editor')
       ])
     })
-    axios.get('http://localhost:5000/regions').then(res => {
+    axios.get('/regions').then(res => {
       const list = res.data
       setRegion(list)
     })
-    axios.get('http://localhost:5000/roles').then(res => {
+    axios.get('/roles').then(res => {
       const list = res.data
       setRole(list)
     })
@@ -98,7 +98,7 @@ export default function UserList() {
   const addFormOk = () => {
     addForm.current.validateFields().then(value => {
       setIsOpen(false)
-      axios.post(`http://localhost:5000/users`, {
+      axios.post(`/users`, {
         ...value,
         'roleState': true,
         'default': false
@@ -120,7 +120,7 @@ export default function UserList() {
   const handleChange = (item) => {
     item.roleState = !item.roleState
     setdataSource([...dataSource])
-    axios.patch(`http://localhost:5000/users/${item.id}`, {
+    axios.patch(`/users/${item.id}`, {
       roleState: item.roleState
     })
   }
@@ -148,7 +148,7 @@ export default function UserList() {
         return item
       }))
       setIsUpadateDisabled(!isUpdateDisabled)
-      axios.patch(`http://localhost:5000/users/${current.id}`,value)
+      axios.patch(`/users/${current.id}`,value)
     })
   }
 
@@ -185,7 +185,7 @@ export default function UserList() {
         onOk={() => {
           updateFormOk()
         }}>
-        <UserForm region={region} role={role} isOpen={isOpen} ref={updateForm} isUpdateDisabled={isUpdateDisabled}></UserForm>
+        <UserForm region={region} role={role} isOpen={isOpen} ref={updateForm} isUpdateDisabled={isUpdateDisabled} isUpdata={true}></UserForm>
       </Modal>
     </div>
   )
