@@ -48,11 +48,13 @@ export default function NewsAdd(props) {
   const handleSave = (auditState) => {
     axios.post('/news', {
       ...formInfo,
+      'content': content,
       'region': User.region ? User.region : '全球',
       'author': User.name,
       'roleId': User.roleId,
       'auditState': auditState,
-      'publishState': Date.now(),
+      'publishState': 0,
+      'createTime': Date.now(),
       'star': 0,
       'view': 0,
       'publishTime': 0
