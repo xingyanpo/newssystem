@@ -46,28 +46,30 @@ export default function NewsAdd(props) {
   }, [])
   
   const handleSave = (auditState) => {
+
     axios.post('/news', {
-      ...formInfo,
-      'content': content,
-      'region': User.region ? User.region : '全球',
-      'author': User.name,
-      'roleId': User.roleId,
-      'auditState': auditState,
-      'publishState': 0,
-      'createTime': Date.now(),
-      'star': 0,
-      'view': 0,
-      'publishTime': 0
-    }).then(res=> {
-      props.history.push(auditState===0?'/news-manage/draft':'/audit-manage/list')
-      notification.info({
-        message: `通知`,
-        description:
-          `你可以到${auditState===0? '草稿箱': '审核列表'}中查看你的新闻`,
-        placement: 'bottomRight',
-      });
+        ...formInfo,
+        "content": content,
+        "region": User.region?User.region:"全球",
+        "author": User.username,
+        "roleId": User.roleId,
+        "auditState": auditState,
+        "publishState": 0,
+        "createTime": Date.now(),
+        "star": 0,
+        "view": 0,
+        // "publishTime": 0
+    }).then(res=>{
+        props.history.push(auditState===0?'/news-manage/draft':'/audit-manage/list')
+
+        notification.info({
+            message: `通知`,
+            description:
+              `您可以到${auditState===0?'草稿箱':'审核列表'}中查看您的新闻`,
+            placement:"bottomRight"
+        });
     })
-  }
+}
 
   return (
     <div>

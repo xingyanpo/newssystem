@@ -1,15 +1,11 @@
-import { Table,Button,Modal,Tree } from 'antd'
+import { Table,Button,Modal} from 'antd'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import {DeleteOutlined, EditOutlined,ExclamationCircleOutlined} from '@ant-design/icons'
+import {DeleteOutlined, EditOutlined,ExclamationCircleOutlined,UploadOutlined} from '@ant-design/icons'
 const {confirm} = Modal 
 
-export default function NewsDraft() {
+export default function NewsDraft(props) {
   const [dataSource, setdataSource] = useState([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [rightList,setRightList] = useState([])
-  const [currentId,setCurrentId] = useState(0)
-  const [currentRights,setCurrentRights] = useState([])
   const columns = [
     {
       title: 'ID',
@@ -28,31 +24,34 @@ export default function NewsDraft() {
     },
     {
       title: '分类',
-      dataIndex: 'category'
+      dataIndex: 'category',
+      render: (category) => {
+        return category.title
+      }
     },
     {
       title: '操作',
       render: (item) => {
         return <div>
           <Button danger type="primary" icon={<DeleteOutlined />} onClick={()=>confirmMethod(item)}></Button>
+          <Button icon={<EditOutlined/> } onClick={()=>{
+            props.history.push(`/news-manage/update/${item.id}`)
+          }}></Button>
+          <Button type="primary" icon={<UploadOutlined /> } onClick={()=>{
 
-          <Button type="primary" icon={<EditOutlined /> } onClick={()=>{
-            setIsModalOpen(true)
-            setCurrentRights(item.rights)
-            setCurrentId(item.id)
             }}></Button>
           </div>
       }
     }
   ]
+  const {username} = JSON.parse(localStorage.getItem('token'))
+
   useEffect(() => {
-    axios.get('/roles').then(res => {
+    axios.get(`/news?author=${username}&auditState=0&_expand=category`).then(res => {
       setdataSource(res.data)
     })
-    axios.get('/rights?_embed=children').then(res => {
-      setRightList(res.data)
-    })
-  }, [])
+  }, [username])
+
   const confirmMethod = (item) => {
     confirm({
       title: '你确定要删除吗？',
@@ -68,41 +67,12 @@ export default function NewsDraft() {
   }
   const deleteMethod = (item) => {
       setdataSource(dataSource.filter(data => data.id !== item.id))
-      axios.delete(`/roles/${item.id}`)
-  }
-  const handleOk = () => {
-    setIsModalOpen(false);
-    setdataSource(dataSource.map((item)=> {
-      if(item.id===currentId) {
-        return {
-          ...item,
-          rights:currentRights
-        }
-      }
-      return item
-    }))
-    axios.patch(`/roles/${currentId}`,{
-      rights: currentRights
-    })
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  const onCheck = (checkKeys) => {
-    setCurrentRights(checkKeys.checked)
+      axios.delete(`/news/${item.id}`)
   }
   return (
     <div>
       <Table dataSource={dataSource} columns={columns} rowKey={(item) => item.id}></Table>
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Tree
-        checkable
-        checkedKeys={currentRights}
-        treeData={rightList}
-        onCheck = {onCheck}
-        checkStrictly = {true}
-      />
-      </Modal>
+      
     </div>
   )
 }
