@@ -21,6 +21,8 @@ function SideMenu(props) {
     '/right-manage/right/list': <UserOutlined />,
     '/news-manage/add': <UserOutlined />,
     '/news-manage/draft': <UserOutlined />,
+    '/news-manage/preview/:id': <NewPreview/>,
+    '/news-manage/update/:id':<NewsUpdate/>,
     '/news-manage/category': <UserOutlined />,
     '/audit-manage/audit': <UserOutlined />,
     '/audit-manage/list': <UserOutlined />,
