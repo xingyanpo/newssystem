@@ -22,6 +22,7 @@ export default function NewsAdd(props) {
       NewsFrom.current.validateFields().then(res => {
         setFormInfo(res)
         setCurrnet(current + 1)
+        console.log(formInfo)
       }).catch(error => {
         console.log(error)
       })
@@ -40,7 +41,7 @@ export default function NewsAdd(props) {
   };
 
   useEffect(() => {
-    axios.get('news').then(res=> {
+    axios.get('/categories').then(res=> {
       setCategoryList(res.data)
     })
   }, [])
