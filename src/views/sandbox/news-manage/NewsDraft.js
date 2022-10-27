@@ -1,4 +1,4 @@
-import { Table,Button,Modal} from 'antd'
+import { Table,Button,Modal, notification} from 'antd'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import {DeleteOutlined, EditOutlined,ExclamationCircleOutlined,UploadOutlined} from '@ant-design/icons'
@@ -16,7 +16,10 @@ export default function NewsDraft(props) {
     },
     {
       title: '标题',
-      dataIndex: 'title'
+      dataIndex: 'title',
+      render: (title, item) => {
+        return <a href={`#/news-manage/preview/${item.id}`}>{title}</a>
+      }
     },
     {
       title: '作者',
@@ -37,15 +40,25 @@ export default function NewsDraft(props) {
           <Button icon={<EditOutlined/> } onClick={()=>{
             props.history.push(`/news-manage/update/${item.id}`)
           }}></Button>
-          <Button type="primary" icon={<UploadOutlined /> } onClick={()=>{
-
-            }}></Button>
+          <Button type="primary" icon={<UploadOutlined /> } onClick={()=>handleCheck(item.id)}></Button>
           </div>
       }
     }
   ]
   const {username} = JSON.parse(localStorage.getItem('token'))
 
+  const handleCheck = (id) => {
+    axios.patch(`/news/${id}`, {auditState: 1}).then(res=> {
+      props.history.push('/audit-manage/list')
+
+        notification.info({
+            message: `通知`,
+            description:
+              `您可以到审核列表中查看您的新闻`,
+            placement:"bottomRight"
+        });
+    })
+  }
   useEffect(() => {
     axios.get(`/news?author=${username}&auditState=0&_expand=category`).then(res => {
       setdataSource(res.data)

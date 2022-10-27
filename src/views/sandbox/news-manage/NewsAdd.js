@@ -108,9 +108,7 @@ export default function NewsAdd(props) {
             setContent(value)
           }}/>
         </div>
-        <div className={current === 2 ? '' : style.hidden}>
-          333
-        </div>
+        <div className={current === 2 ? '' : style.hidden}></div>
       </div>
       <div style={{margin: '20px 0'}}>
         {current > 0 && <Button onClick={handlePrevious}>上一步</Button>}
