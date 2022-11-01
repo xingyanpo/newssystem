@@ -13,7 +13,6 @@ export default function Audit() {
     }
     axios.get('/news?auditState=1&_expand=category').then(res => {
       const list = res.data
-      console.log(list)
       setdataSource(roleObj[roleId]==='superadmin'? list: [
         ...list.filter(item=>item.username === username),
         ...list.filter(item=> item.region === region && roleObj[item.roleId] === 'editor')
@@ -50,11 +49,11 @@ export default function Audit() {
       }
     },
   ];
-  const handleAudit = (item, auditState, pulishState) => {
+  const handleAudit = (item, auditState, publishState) => {
     setdataSource(dataSource.filter(data => data.id !== item.id))
     axios.patch(`/news/${item.id}`, {
       auditState,
-      pulishState
+      publishState
     }).then(res => {
       notification.info({
         message: `通知`,

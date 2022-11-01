@@ -68,8 +68,9 @@ export default function AuditList(props) {
   }
   const handlePublish = (item) => {
     axios.patch(`/news/${item.id}`, {
-      'publishState': 2
-    }).then(res => {
+      'publishState': 2,
+      'publishTime': Date.now()
+    }).then(() => {
       props.history.push('/publish-manage/published')
       notification.info({
         message: '通知',

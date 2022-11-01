@@ -5,12 +5,14 @@ import {
   MenuUnfoldOutlined,
   UserOutlined
 } from '@ant-design/icons';
+import {connect} from 'react-redux'
 import { Layout, Dropdown, Menu, Avatar } from 'antd';
 import { withRouter } from 'react-router-dom';
 const { Header } = Layout;
 
 
 function TopHeader(props) {
+  console.log(props)
   const [collapsed, setCollapsed] = useState(false);
   const changeButton = () => {
     setCollapsed(!collapsed)
@@ -41,4 +43,9 @@ function TopHeader(props) {
   )
 }
 
-export default withRouter(TopHeader)
+const mapStateToProps = ({CollApsedReducer: {isCollapsed}}) => {
+  return {
+    isCollapsed
+  }
+}
+export default connect(mapStateToProps)(withRouter(TopHeader))
