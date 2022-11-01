@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
   MenuFoldOutlined,
@@ -12,10 +12,8 @@ const { Header } = Layout;
 
 
 function TopHeader(props) {
-  console.log(props)
-  const [collapsed, setCollapsed] = useState(false);
   const changeButton = () => {
-    setCollapsed(!collapsed)
+    props.changeCollapsed()
   }
   const {role: {roleName}, username} = JSON.parse(localStorage.getItem('token')) 
   const menu = (
@@ -31,7 +29,7 @@ function TopHeader(props) {
   );
   return (
     <Header className="site-layout-background" style={{ padding: 0 }} >
-      {collapsed ? <MenuUnfoldOutlined onClick={changeButton} /> : <MenuFoldOutlined onClick={changeButton} />}
+      {props.isCollapsed ? <MenuUnfoldOutlined onClick={changeButton} /> : <MenuFoldOutlined onClick={changeButton} />}
 
       <div style={{ float: "right" ,marginRight:'10px'}}>
         <span>欢迎<span style={{color: '#1890ff'}}>{username}</span>回来</span>
@@ -48,4 +46,12 @@ const mapStateToProps = ({CollApsedReducer: {isCollapsed}}) => {
     isCollapsed
   }
 }
-export default connect(mapStateToProps)(withRouter(TopHeader))
+const mapDispatchToProps = {
+  changeCollapsed() {
+    return {
+      type: 'change_collapsed',
+      // payload
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TopHeader))

@@ -1,5 +1,6 @@
 
 import { Layout, Menu } from 'antd';
+import {connect} from 'react-redux'
 import {UserOutlined, ProfileOutlined} from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import SubMenu from 'antd/lib/menu/SubMenu';
@@ -55,7 +56,7 @@ function SideMenu(props) {
   const openKeys = ['/' + props.location.pathname.split('/')[1]]
 
   return (
-    <Sider trigger={null} collapsible collapsed={false}>
+    <Sider trigger={null} collapsible collapsed={props.isCollapsed}>
       <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
         <div className="sidemenu-title">Backstage Management System</div>
         <div style={{ flex: '1', overflow: 'auto' }}>
@@ -68,4 +69,9 @@ function SideMenu(props) {
   )
 }
 
-export default withRouter(SideMenu)
+const mapStateToProps = ({CollApsedReducer: {isCollapsed}}) => {
+  return {
+    isCollapsed
+  }
+}
+export default connect(mapStateToProps)(withRouter(SideMenu))
